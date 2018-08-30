@@ -58,8 +58,30 @@ public class RepairManager extends SkillManager {
 
     public void handleRepair(ItemStack item) {
         Player player = getPlayer();
-        Repairable repairable = mcMMO.getRepairableManager().getRepairable(item.getType());
-
+        Repairable repairable;
+        if(item.getItemMeta().getLore()!=null){
+            ArrayList lore = item.getItemMeta().getLore();
+            if(lore.contains("+10 Stamina")){
+                String nam = item.getType().name();
+                if(nam.contains("HELMET"))
+                	repairable = mcMMO.getRepairableManager().getRepairable(Material.DIAMOND_HELMET);
+                else if(nam.contains("CHEST"))
+                	repairable = mcMMO.getRepairableManager().getRepairable(Material.DIAMOND_CHESTPLATE);
+                else if(nam.contains("LEG"))
+                	repairable = mcMMO.getRepairableManager().getRepairable(Material.DIAMOND_LEGGINGS);
+                else if(nam.contains("BOOT"))
+                	repairable = mcMMO.getRepairableManager().getRepairable(Material.DIAMOND_BOOTS);
+                else if(nam.contains("SWORD"))
+                	repairable = mcMMO.getRepairableManager().getRepairable(Material.DIAMOND_SWORD);
+                else
+                	repairable = mcMMO.getRepairableManager().getRepairable(Material.DIAMOND_AXE);
+            }
+            else
+                repairable = mcMMO.getRepairableManager().getRepairable(item.getType());
+        }
+        else
+            repairable = mcMMO.getRepairableManager().getRepairable(item.getType());
+        
         if (item.getItemMeta().isUnbreakable()) {
             player.sendMessage(LocaleLoader.getString("Anvil.Unbreakable"));
             return;
